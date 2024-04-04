@@ -4,7 +4,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 const prisma = new PrismaClient();
 
 
-export async function verifyToken(token: string) {
+export async function verifyToken(token: string): Promise<string | jwt.JwtPayload | null> {
     try {
         const decodedToken = jwt.verify(token, process.env.SECRET_KEY as string);
         console.log(decodedToken);
