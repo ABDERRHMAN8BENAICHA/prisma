@@ -6,14 +6,16 @@ import { PrismaClient } from "@prisma/client";
 import { serialize } from "cookie";
 const prisma = new PrismaClient();
 export async function POST(req: Request) {
-    const { name, email, password } = await req.json();
+    const { name, email, password  , role , ProfileImage } = await req.json();
     const hashedPassword = await bcrypt.hash(password, 10);
     try {
         const user = await prisma.user.create({
             data: {
-                email: email,
-                password: hashedPassword,
                 name: name,
+                email: email,
+                role: role,
+                ProfileImage: ProfileImage,
+                password: hashedPassword,
             }
         });
         if (user) {
@@ -21,24 +23,26 @@ export async function POST(req: Request) {
 
             const cookie = serialize("token", token, {
                 httpOnly: true,
-                maxAge: 60 * 60 * 24 * 30,
+                maxAge: 7 * 24 * 60 * 60 * 1000,
                 path: "/",
             });
 
             return Response.json({
-                message: "User already exists",
+                message: "User registered successfully",
                 data: {
-                    user,
+                    user: {
+                        id: user.id,
+                        name: user.name,
+                        email: user.email,
+                        createdAt: user.createdAt,
+                        updatedAt: user.updatedAt
+
+                    },
                     expirationDate: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000)
                 },
             }, { headers: { "Set-Cookie": cookie }
             });
         }
-        console.log(user);
-        return Response.json({
-            message: "User registered successfully",
-            data: user
-        });
     } catch (error) {
         console.log(error);
         return Response.json({ message: "User already exists" })

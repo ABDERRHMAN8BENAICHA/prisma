@@ -5,11 +5,16 @@ const prisma = new PrismaClient();
 export async function DELETE(req: Request) {
     const { email } = await req.json();
     try {
-        const user = await prisma.user.delete({
+        const user = await prisma.user.update({
             where: {
                 email: email
+            },
+            data: {
+                userStatus: {
+                    set: "INACTIVE"
+                }
             }
-        });
+        })
         return Response.json({
             message: "User deleted successfully",
             data: user

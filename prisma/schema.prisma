@@ -9,27 +9,70 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
-  posts     Post[]
+  id           String     @id @default(cuid())
+  email        String     @unique
+  name         String
+  password     String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt()
+  userStatus   UserStatus @default(ACTIVE)
+  role         UserRole   @default(USER)
+  Products     Product[]
+  Orders       Order[]    @relation("UserOrder")
+  ProfileImage String?
 }
 
-model Post {
-  id        String   @id @default(cuid())
-  title     String
-  content   String
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt()
+model Product {
+  id          String    @id @default(cuid())
+  title       String
+  description String
+  type        String
+  evaluation  Int       @default(0)
+  price       Float
+  status      Prostatus @default(PENDING)
+  images      Json
+  owner       User      @relation(fields: [ownerId], references: [id])
+  ownerId     String
+  orders      Order[]   @relation("ProductOrder")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt()
+}
+
+model Order {
+  id        String      @id @default(cuid())
+  product   Product     @relation("ProductOrder", fields: [productId], references: [id])
+  productId String
+  user      User        @relation("UserOrder", fields: [userId], references: [id])
+  userId    String
+  status    OrderStatus
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt()
+}
+
+enum UserRole {
+  ADMIN
+  USER
+  OWNER
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum Prostatus {
+  PENDING
+  APPROVED
+  REJECTED
+  DELETED
+}
+
+enum OrderStatus {
+  RESERVER
+  NOT_RESERVED
 }

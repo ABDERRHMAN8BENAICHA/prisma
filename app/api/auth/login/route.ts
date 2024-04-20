@@ -33,6 +33,8 @@ export async function POST(req: Request) {
                         id: user.id,
                         name: user.name,
                         email: user.email,
+                        role: user.role,
+                        ProfileImage: user.ProfileImage,
                         createdAt: user.createdAt,
                         updatedAt: user.updatedAt
 
