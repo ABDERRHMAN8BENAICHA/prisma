@@ -11,6 +11,9 @@ export async function POST(req: Request) {
         const user = await prisma.user.findUnique({
             where: {
                 email: email
+            },
+            include : {
+                Products : true
             }
         });
         if (user) {
@@ -24,7 +27,6 @@ export async function POST(req: Request) {
                 maxAge: 60 * 60 * 24 * 30,
                 path: "/",
             });
-
             return Response.json({
                 message: "User found",
                 data: {
@@ -36,8 +38,8 @@ export async function POST(req: Request) {
                         role: user.role,
                         ProfileImage: user.ProfileImage,
                         createdAt: user.createdAt,
-                        updatedAt: user.updatedAt
-
+                        updatedAt: user.updatedAt,
+                        products: user.Products
                     },
                 }
             },

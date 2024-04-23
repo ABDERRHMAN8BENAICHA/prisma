@@ -11,15 +11,21 @@
     "make": "prisma migrate dev --name init"
   },
   "dependencies": {
+    "@edgestore/react": "^0.1.6",
+    "@edgestore/server": "^0.1.6",
     "@prisma/client": "^5.11.0",
     "@types/cookie": "^0.6.0",
     "@vercel/postgres": "^0.8.0",
     "bcrypt": "^5.1.1",
     "cookie": "^0.6.0",
     "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.372.0",
     "next": "14.1.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-dropzone": "^14.2.3",
+    "tailwind-merge": "^2.3.0",
+    "zod": "^3.22.5"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
