@@ -1,7 +1,8 @@
 import { NextRequest } from "next/server";
 import jwt from "jsonwebtoken";
+import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
 
-export async function getToken(request : NextRequest) {
+export async function getToken(request : NextRequest) : Promise<RequestCookie | undefined> {
     const token = request.cookies.get("token");
     return token;
 }
