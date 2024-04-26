@@ -4,6 +4,7 @@ import { SingleImageDropzone } from '@/components/SingleImageDropzone';
 import { useEdgeStore } from '@/lib/edgestore';
 import Image from 'next/image';
 import { useState } from 'react';
+import { Button } from './ui/button';
 
 export function SingleImageDropzoneUsage() {
     const [myRes, setmyRes] = useState<{ url: string }>();
@@ -21,20 +22,18 @@ export function SingleImageDropzoneUsage() {
                     setFile(file);
                 }}
             />
-            <div className='m-3 h-2 w-44 rounded overflow-hidden border  '>
-                <div className='bg-white h-full transition-all duration-300' style={{width : `${progress}%`}} />
-            </div>
-            <button
+            <Button
                 onClick={async () => {
                     if (file) {
+                        const maxSize = 10 * 1024 * 1024; // 10MB
+                        if (file.size > maxSize) {
+                            alert("File size exceeds the maximum allowed size.");
+                            return;
+                        }
                         const res = await edgestore.publicFiles.upload({
                             file,
-                            options : {
-
-                            },
                             onProgressChange: (progress) => {
-                                // you can use this to show a progress bar
-                                setProgress(progress)
+                                setProgress(progress);
                             },
                         });
                         // you can run some server action or api here
@@ -45,8 +44,11 @@ export function SingleImageDropzoneUsage() {
                 }}
             >
                 Upload
-            </button>
-            {myRes && <Image src={myRes.url} width={200} height={200}  alt='lol'/>}
+            </Button>
+            <div className='m-3 h-2 w-44 rounded overflow-hidden border'>
+            <div className={`dark:bg-white bg-black h-full transition-all duration-300 `} style={{width : `${progress}%`}} />
+            </div>
+            {myRes && <Image src={myRes.url} width={200} height={200} alt='lol' />}
         </div>
     );
 }
