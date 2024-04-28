@@ -12,8 +12,8 @@ export async function POST(req: Request) {
             where: {
                 email: email
             },
-            include : {
-                Products : true
+            include: {
+                Products: true
             }
         });
         if (user) {
@@ -21,13 +21,14 @@ export async function POST(req: Request) {
             if (!passwordMatch) {
                 return Response.json({ message: "User not found" });
             }
-            const token = jwt.sign({ id: user?.id, email: user?.email, expirationDate: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000) }, process.env.SECRET_KEY as string, { expiresIn: '7d' });
+            const token = jwt.sign({ id: user?.id, email: user?.email, role: user.role, ProfileImage: user?.ProfileImage, expirationDate: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000) }, process.env.SECRET_KEY as string, { expiresIn: '7d' });
             const cookie = serialize("token", token, {
                 httpOnly: true,
                 maxAge: 60 * 60 * 24 * 30,
                 path: "/",
             });
             return Response.json({
+                status: 200,
                 message: "User found",
                 data: {
                     expirationDate: new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000),

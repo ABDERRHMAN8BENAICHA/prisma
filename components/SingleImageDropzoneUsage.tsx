@@ -5,15 +5,17 @@ import { useEdgeStore } from '@/lib/edgestore';
 import Image from 'next/image';
 import { useState } from 'react';
 import { Button } from './ui/button';
+import { Progress } from "@/components/ui/progress"
+
 
 export function SingleImageDropzoneUsage() {
     const [myRes, setmyRes] = useState<{ url: string }>();
     const [file, setFile] = useState<File>();
     const { edgestore } = useEdgeStore();
     const [progress, setProgress] = useState(0);
-
+    window.localStorage.setItem('myRes', JSON.stringify(myRes?.url));
     return (
-        <div>
+        <div className='flex flex-col justify-center items-center gap-4'>
             <SingleImageDropzone
                 width={200}
                 height={200}
@@ -22,7 +24,7 @@ export function SingleImageDropzoneUsage() {
                     setFile(file);
                 }}
             />
-            <Button
+            <Button 
                 onClick={async () => {
                     if (file) {
                         const maxSize = 10 * 1024 * 1024; // 10MB
@@ -45,10 +47,7 @@ export function SingleImageDropzoneUsage() {
             >
                 Upload
             </Button>
-            <div className='m-3 h-2 w-44 rounded overflow-hidden border'>
-            <div className={`dark:bg-white bg-black h-full transition-all duration-300 `} style={{width : `${progress}%`}} />
-            </div>
-            {myRes && <Image src={myRes.url} width={200} height={200} alt='lol' />}
+            <Progress value={progress}  />
         </div>
     );
 }

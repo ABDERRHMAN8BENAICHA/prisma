@@ -11,11 +11,15 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ReloadIcon } from "@radix-ui/react-icons"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import axios from "axios"
 import Link from "next/link"
+import { useEdgeStore } from "@/lib/edgestore"
+import { SingleImageDropzone } from "@/components/SingleImageDropzone"
+import { Progress } from "@/components/ui/progress"
 import { useRouter } from "next/navigation"
-export function ButtonLoading() {
+import { SingleImageDropzoneUsage } from "@/components/SingleImageDropzoneUsage"
+export function ButtonLoading({ className }: { className?: string }) {
     return (
         <Button disabled className="w-full">
             <ReloadIcon className={`mr-2 h-4 w-4 animate-spin `} />
@@ -24,16 +28,17 @@ export function ButtonLoading() {
     )
 }
 export default function LoginPage() {
-    const {push} = useRouter(); 
-    const [loading , setLoading] = useState<boolean>(false);
-    const [error , setError] = useState<string | null>(null);
-    const [email , setEmail] = useState<string>("")
-    const [password , setPassword] = useState<string>("")
+    const { push } = useRouter();
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+    const [name, setName] = useState<string>("")
+    const [email, setEmail] = useState<string>("")
+    const [password, setPassword] = useState<string>("")
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLoading(true);
-        axios.post("/api/auth/login" , {email , password}).then((res) => {
-            if(res.data.status === 200){
+        axios.post("/api/auth/register", { email, password, name, ProfileImage: window.localStorage.getItem('myRes') }).then((res) => {
+            if (res.data.status === 200) {
                 setLoading(false);
                 setTimeout(() => {
                     push("/");
@@ -45,22 +50,29 @@ export default function LoginPage() {
         })
     }
     return (
-        <div className="container">
+        <div className="container mb-10">
             <Card className="w-[350px] m-auto mt-20">
                 <CardHeader className="text-center" >
-                    <CardTitle>Log In Page</CardTitle>
+                    <CardTitle>Sign Up Page</CardTitle>
                     <CardDescription>Please enter your account info to log in .</CardDescription>
                 </CardHeader>
                 <CardContent>
+                    <div className="mb-4">
+                        <SingleImageDropzoneUsage />
+                    </div>
                     <form onSubmit={handleSubmit}>
                         <div className="grid w-full items-center gap-4">
                             <div className="flex flex-col space-y-1.5">
+                                <Label htmlFor="name">Name</Label>
+                                <Input type="text" id="name" placeholder="name" required onChange={(e) => setName(e.target.value)} />
+                            </div>
+                            <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="email">Email</Label>
-                                <Input type="email" id="email" placeholder="email" onChange={(e)=> setEmail(e.target.value)} />
+                                <Input type="email" id="email" placeholder="email" required onChange={(e) => setEmail(e.target.value)} />
                             </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="password">Password</Label>
-                                <Input type="password" id="password" placeholder="password"  onChange={(e)=> setPassword(e.target.value)} />
+                                <Input type="password" id="password" placeholder="password" required onChange={(e) => setPassword(e.target.value)} />
                             </div>
                         </div>
                         <CardFooter className="flex justify-between mt-10">
@@ -69,8 +81,11 @@ export default function LoginPage() {
                             </div>
                         </CardFooter>
                     </form>
+
                     <CardFooter>
-                    <p>Don t have an account ? <Link href="/signup" className="text-blue-500">Sign Up</Link></p>
+                        <div className="text-center">
+                            <p>I already have an account <Link href="/login" className="text-blue-500">Log In</Link></p>
+                        </div>
                     </CardFooter>
                 </CardContent>
             </Card>

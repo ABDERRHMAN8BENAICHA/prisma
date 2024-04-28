@@ -35,7 +35,7 @@ model Product {
   evaluation  Int       @default(0)
   price       Float
   status      Prostatus @default(PENDING)
-  images      Json
+  image      String
   owner       User      @relation(fields: [ownerId], references: [id])
   ownerId     String
   orders      Order[]   @relation("ProductOrder")
