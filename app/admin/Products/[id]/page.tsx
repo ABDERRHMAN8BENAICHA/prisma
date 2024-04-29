@@ -38,7 +38,7 @@ export default function Page({ params }: Props) {
             }
         }
         fetchData();
-    },[])
+    }, [])
     console.log(product);
     const [title, setTitle] = useState<string>("")
     const [description, setDescription] = useState<string>("")
@@ -78,7 +78,7 @@ export default function Page({ params }: Props) {
                             <div className="grid w-full items-center gap-4">
                                 <div className="flex flex-col space-y-1.5">
                                     <Label htmlFor="title">Title</Label>
-                                    <Input  defaultValue={product?.title} type="text" id="title" placeholder="title" required onChange={(e) => setTitle(e.target.value)} />
+                                    <Input defaultValue={product?.title} type="text" id="title" placeholder="title" required onChange={(e) => setTitle(e.target.value)} />
                                 </div>
                                 <div className="flex flex-col space-y-1.5">
                                     <Label htmlFor="description">Description</Label>
