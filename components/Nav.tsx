@@ -55,7 +55,7 @@ export default function Nav() {
                         hover:text-sky-600
                         transition-all
                         duration-300
-                        "  href="/products">
+                        "  href="/contact-us">
                             Contact Us
                         </Link>
                     </li>

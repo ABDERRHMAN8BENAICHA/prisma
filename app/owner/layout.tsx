@@ -1,4 +1,4 @@
-import NotThisPage from "@/components/NotThisPage";
+import Heading from "@/components/Heading";
 import { Button } from "@/components/ui/button";
 import { decodeToken, getCookie } from "@/lib";
 import { JwtPayload } from "jsonwebtoken";
@@ -11,24 +11,30 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     console.log((token as JwtPayload)?.role);
     if (!cook) {
         return (
-            <div className="w-full flex justify-center items-center ">
-                <Link href="/">
-                    <Button >
-                        Go Back
-                    </Button>
-                </Link>
-            </div>
+            <>
+                <Heading title="You are not authorized to access this page" isCentered={true} />
+                <div className="w-full flex justify-center items-center ">
+                    <Link href="/">
+                        <Button >
+                            Go Back
+                        </Button>
+                    </Link>
+                </div>
+            </>
         );
     }
     if ((token as JwtPayload)?.role !== "OWNER") {
         return (
-            <div className="w-full flex justify-center items-center ">
-                <Link href="/">
-                    <Button >
-                        Go Back
-                    </Button>
-                </Link>
-            </div>
+            <>
+                <Heading title="You are not authorized to access this page" isCentered={true} />
+                <div className="w-full flex justify-center items-center ">
+                    <Link href="/">
+                        <Button >
+                            Go Back
+                        </Button>
+                    </Link>
+                </div>
+            </>
         )
     }
     return (

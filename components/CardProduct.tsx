@@ -14,6 +14,7 @@ export interface ProductType {
     evaluation: number;
     ownerId: string;
     images: string;
+    status : string
     image: string; // Add the 'image' property
 }
 

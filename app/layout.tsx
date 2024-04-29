@@ -20,8 +20,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const cook = getCookie("token");
-  console.log(cook);
-
   return (
     <html lang="en">
       <body className={inter.className}>
